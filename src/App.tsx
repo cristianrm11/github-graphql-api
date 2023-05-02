@@ -7,9 +7,16 @@ interface Repository {
   url: string;
 }
 
+interface User {
+  name: string;
+  login: string;
+  avatarUrl: string;
+  url: string;
+}
+
 interface SearchData {
   search: {
-    nodes: Repository[];
+    nodes: (Repository | User)[];
   };
 }
 
@@ -31,18 +38,36 @@ const GET_REPOSITORIES = gql`
   }
 `;
 
+const GET_USERS = gql`
+  query GetUsers($query: String!) {
+    search(query: $query, type: USER, first: 10) {
+      nodes {
+        ... on User {
+          name
+          login
+          avatarUrl(size: 100)
+          url
+        }
+      }
+    }
+  }
+`;
+
 function App() {
   const [query, setQuery] = useState<string>('');
-  const { loading, error, data } = useQuery<SearchData, SearchVars>(GET_REPOSITORIES, {
+  const { loading: repoLoading, error: repoError, data: repoData } = useQuery<SearchData, SearchVars>(GET_REPOSITORIES, {
+    variables: { query }
+  });
+  const { loading: userLoading, error: userError, data: userData } = useQuery<SearchData, SearchVars>(GET_USERS, {
     variables: { query }
   });
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :(</p>;
+  if (repoLoading || userLoading) return <p>Loading...</p>;
+  if (repoError || userError) return <p>Error :(</p>;
 
   return (
     <div>
-      <label>Type the name of the repository</label>
+      <h2>Repositories</h2>
       <input
         type="text"
         value={query}
@@ -51,9 +76,18 @@ function App() {
         }
       />
       <ul>
-        {data?.search.nodes.map((repo: Repository) => (
+        {repoData?.search.nodes.map((repo: Repository) => (
           <li key={repo.url}>
             <a href={repo.url}>{repo.nameWithOwner}</a>: {repo.description}
+          </li>
+        ))}
+      </ul>
+      <h2>Users</h2>
+      <ul>
+        {userData?.search.nodes.map((user: User) => (
+          <li key={user.login}>
+            <img src={user.avatarUrl} alt={user.login} />
+            <a href={user.url}>{user.name || user.login}</a>
           </li>
         ))}
       </ul>

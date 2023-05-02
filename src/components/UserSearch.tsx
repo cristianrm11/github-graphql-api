@@ -10,12 +10,11 @@ function UserSearch() {
     variables: { query: userQuery }
   });
 
-//   if (repoLoading || userLoading) return <p>Loading...</p>;
-//   if (repoError || userError) return <p>Error :(</p>;
+   if (userError) return <p>Error :(</p>;
 
   return (
     <div className="container">
-      <h1>Github Users Search</h1>
+      <h1>Users Search</h1>
       <div className="search-container">
         <input
           type="text"
@@ -29,9 +28,9 @@ function UserSearch() {
       </div>
       <div className="results-container">
         <div className="results-section">
-          <h2>Users</h2>
           <ul>
-            {userData?.search.nodes.map((user: User) => (
+            {userLoading ? <p>Loading...</p> 
+                : userData?.search.nodes.map((user: User) => (
               <li key={user.login}>
                 <img src={user.avatarUrl} alt={user.login} />
                 <a href={user.url}>{user.name || user.login}</a>

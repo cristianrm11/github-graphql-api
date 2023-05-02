@@ -1,10 +1,11 @@
-
 import { ApolloClient, InMemoryCache } from '@apollo/client';
+
+const { VITE_GITHUB_ACCESS_TOKEN } = import.meta.env;
 
 export const client = new ApolloClient({
     uri: 'https://api.github.com/graphql',
     headers: {
-        Authorization: `Bearer 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`
+        Authorization: `Bearer ${VITE_GITHUB_ACCESS_TOKEN}`
     },
     cache: new InMemoryCache()
 });

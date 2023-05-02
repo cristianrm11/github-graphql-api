@@ -3,14 +3,14 @@ import { useQuery } from '@apollo/client';
 import { Repository, SearchData, SearchVars } from '../types/interfaces';
 import { GET_REPOSITORIES } from '../graphql/queries';
 
-function RepositorySearch() {
+function RepositorySearch(): JSX.Element {
   const [repoQuery, setRepoQuery] = useState<string>('');
 
   const { loading: repoLoading, error: repoError, data: repoData } = useQuery<SearchData, SearchVars>(GET_REPOSITORIES, {
     variables: { query: repoQuery }
   });
-//   if (repoLoading || userLoading) return <p>Loading...</p>;
-//   if (repoError || userError) return <p>Error :(</p>;
+
+  if (repoError) return <p>Error :(</p>;
 
   return (
     <div className="container">
@@ -28,9 +28,9 @@ function RepositorySearch() {
       </div>
       <div className="results-container">
         <div className="results-section">
-          <h2>Repositories</h2>
           <ul>
-            {repoData?.search.nodes.map((repo: Repository) => (
+            {repoLoading ? <p>Loading...</p> 
+                : repoData?.search.nodes.map((repo: Repository) => (
               <li key={repo.url}>
                 <a href={repo.url}>{repo.nameWithOwner}</a>: {repo.description}
               </li>

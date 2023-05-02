@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { Repository, User, SearchData, SearchVars } from '../types/interfaces';
-import { GET_REPOSITORIES, GET_USERS } from '../graphql/queries';
+import { Repository, SearchData, SearchVars } from '../types/interfaces';
+import { GET_REPOSITORIES } from '../graphql/queries';
 
-function App() {
+function RepositorySearch() {
   const [repoQuery, setRepoQuery] = useState<string>('');
 
   const { loading: repoLoading, error: repoError, data: repoData } = useQuery<SearchData, SearchVars>(GET_REPOSITORIES, {
@@ -42,4 +42,4 @@ function App() {
   );
 }
 
-export default App;
+export default RepositorySearch;

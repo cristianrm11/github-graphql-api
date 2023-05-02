@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { Repository, User, SearchData, SearchVars } from '../types/interfaces';
+import { User, SearchData, SearchVars } from '../types/interfaces';
 import { GET_USERS } from '../graphql/queries';
 
 function UserSearch() {

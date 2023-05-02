@@ -1,8 +1,9 @@
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client';
 import { ChakraProvider, extendBaseTheme } from '@chakra-ui/react'
 import chakraTheme from '@chakra-ui/theme'
+import { client } from './graphql/client.ts'
 
 const { Button } = chakraTheme.components
 
@@ -11,15 +12,6 @@ const theme = extendBaseTheme({
     Button,
   },
 })
-
-
-const client = new ApolloClient({
-  uri: 'https://api.github.com/graphql',
-  headers: {
-    Authorization: `Bearer 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`
-  },
-  cache: new InMemoryCache()
-});
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <ApolloProvider client={client}>
